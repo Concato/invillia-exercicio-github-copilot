@@ -13,23 +13,47 @@ document.addEventListener("DOMContentLoaded", () => {
       // Clear loading message
       activitiesList.innerHTML = "";
 
-      // Populate activities list
+      // Limpa as opções antigas do select, mantendo o placeholder
+      activitySelect.innerHTML = '<option value="">-- Select an activity --</option>';
+
+      // Popula a lista de atividades
       Object.entries(activities).forEach(([name, details]) => {
         const activityCard = document.createElement("div");
         activityCard.className = "activity-card";
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        // Mostra participantes com layout melhorado
+        let participantsHtml = "";
+        if (details.participants.length > 0) {
+          participantsHtml = `
+            <div class="participants-list">
+              <p><strong>Participants (${details.participants.length}):</strong></p>
+              <div class="participants-badges">
+                ${details.participants
+                  .map(
+                    email =>
+                      `<span class="participant-badge" title="${email}">${email.split("@")[0]}</span>`
+                  )
+                  .join("")}
+              </div>
+            </div>
+          `;
+        } else {
+          participantsHtml = `<p><em>No participants yet.</em></p>`;
+        }
+
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          ${participantsHtml}
         `;
 
         activitiesList.appendChild(activityCard);
 
-        // Add option to select dropdown
+        // Adiciona opção ao select
         const option = document.createElement("option");
         option.value = name;
         option.textContent = name;
