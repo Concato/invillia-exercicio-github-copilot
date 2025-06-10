@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${details.participants
                   .map(
                     email =>
-                      `<span class="participant-badge" title="${email}">${email.split("@")[0]}</span>`
+                      `<span class="participant-badge" title="${email}">${document.createTextNode(email.split("@")[0]).textContent}</span>`
                   )
                   .join("")}
               </div>
